@@ -1,0 +1,27 @@
+{
+  "name": "visualizer",
+  "version": "0.0.1",
+  "description": "A song visualizer based on Monstercat YouTube videos",
+  "main": "server.js",
+  "scripts": {
+    "test": "gulp test",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "sound",
+    "music",
+    "visualizer",
+    "soundcloud"
+  ],
+  "author": "Jack Horton",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.12.4"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-babel": "^5.0.1",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0"
+  }
+}
