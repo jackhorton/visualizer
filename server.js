@@ -3,7 +3,8 @@
 const express = require("express");
 const app = express();
 
-app.use("/public", express.static("public"));
+// TODO: take this out for production
+app.use(express.static("src"));
 
 app.get("/", function(req, res) {
     res.sendFile(__dirname + "/index.html");

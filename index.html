@@ -6,14 +6,13 @@
 </head>
 <body>
     <div class="main">
-        <div class="welcome"></div>
-        <div class="visualizer">
-            <audio id="player"></audio>
-        </div>
-        <div class="comments"></div>
-        <div class="tracks"></div>
+        <div id="welcome"></div>
+        <div id="visualizer-wrapper"></div>
+        <div id="commentlist"></div>
+        <div id="tracklist"></div>
+        <div id="controls"></div>
     </div>
     <script src="http://connect.soundcloud.com/sdk.js"></script>
-    <script src="public/js/app.js"></script>
+    <script data-main="js/app.js" src="lib/require.js"></script>
 </body>
 </html>
