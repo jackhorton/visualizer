@@ -18,17 +18,17 @@ require(["jquery",
          "pubsub",
          "router",
          "views/welcome",
-         "views/app"
-], function($, Backbone, ps, Router, WelcomeView, AppView) {
+         "views/app",
+         "settings"
+], function($, Backbone, ps, Router, WelcomeView, AppView, settings) {
     // set up the soundcloud sdk
-    SC.initialize({
-        client_id: "578875cadc55ccccac217296e207d111",
-        client_secret: "1e27455c2b3e6ccdd2e14c70ab33ed5c",
-        redirect_uri: "http://localhost:8000/connect"
-    });
+    SC.initialize(settings.soundcloud);
+
+    // set up namespace
+    window.app = window.app || {};
 
     // register routes
-    new Router();
+    app.router = new Router();
 
     // track urls
     Backbone.history.start({pushState: true});
@@ -43,9 +43,6 @@ require(["jquery",
             Backbone.history.navigate(href.attr, true);
         }
     });
-
-    // set up page structure
-    new WelcomeView();
 
     // alert any components that the app has started
     ps.trigger("visualizer:start");

@@ -1,10 +1,12 @@
-define(["backbone", "templates/welcome"], function(Backbone, welcomeTemplate) {
+define(["backbone", "templates/welcome", "pubsub"], function(Backbone, welcomeTemplate, ps) {
     var view = Backbone.View.extend({
         el: "#welcome",
 
         template: welcomeTemplate,
 
         initialize: function() {
+            this.listenTo(ps, "visualizer:login", this.remove);
+
             this.render();
         },
 

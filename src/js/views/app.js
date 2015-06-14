@@ -16,9 +16,9 @@ define(["jquery",
             this.$controls = this.$("#controls");
             this.$commentlist = this.$("#commentlist");
 
-            this.$tracklist.html(new TracklistView().render().el);
-            this.$visualizer.html(new VisualizerView().render().el);
-            this.$controls.html(new AudioController().render().el);
+            // this.$tracklist.html(new TracklistView().render().el);
+            // this.$visualizer.html(new VisualizerView().render().el);
+            // this.$controls.html(new AudioController().render().el);
 
             this.listenTo(ps, "visualizer:song:change", this.updateTitle);
         },
