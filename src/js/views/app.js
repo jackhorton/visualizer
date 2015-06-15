@@ -4,21 +4,17 @@ define(["jquery",
         "views/tracklist",
         "views/visualizer",
         "views/player"
-], function($, Backbone, ps, TracklistView, VisualizerView, AudioController) {
+], function($, Backbone, ps, TracklistView, VisualizerView, Player) {
     var view = Backbone.View.extend({
         // attach to the main wrapper
         el: "#main",
 
         // instantiate the app and all required views
         initialize: function() {
-            this.$tracklist = this.$("#tracklist");
-            this.$visualizer = this.$("#visualizer-wrapper");
-            this.$controls = this.$("#controls");
-            this.$commentlist = this.$("#commentlist");
+            this.$el.removeClass("loggedout").addClass("loggedIn");
 
-            // this.$tracklist.html(new TracklistView().render().el);
-            // this.$visualizer.html(new VisualizerView().render().el);
-            // this.$controls.html(new AudioController().render().el);
+            this.$el.append(new TracklistView());
+            this.$el.append(new VisualizerView());
 
             this.listenTo(ps, "visualizer:song:change", this.updateTitle);
         },

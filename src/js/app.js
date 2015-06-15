@@ -17,10 +17,8 @@ require(["jquery",
          "backbone",
          "pubsub",
          "router",
-         "views/welcome",
-         "views/app",
          "settings"
-], function($, Backbone, ps, Router, WelcomeView, AppView, settings) {
+], function($, Backbone, ps, Router, settings) {
     // set up the soundcloud sdk
     SC.initialize(settings.soundcloud);
 

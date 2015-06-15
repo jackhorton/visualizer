@@ -1,8 +1,11 @@
 "use strict";
 
+const path = require("path");
+
 const gulp = require("gulp");
 const hbs = require("gulp-handlebars");
 const defineModule = require("gulp-define-module");
+const less = require("gulp-less");
 
 gulp.task('templates', function() {
     // Load templates from the templates/ folder relative to where gulp was executed
@@ -15,8 +18,17 @@ gulp.task('templates', function() {
         .pipe(gulp.dest('src/templates/compiled'));
 });
 
-gulp.task("watch", function() {
-    gulp.watch("src/templates/*.hbs", ["templates"]);
+gulp.task("less", function() {
+    gulp.src("src/less/main.less")
+        .pipe(less({
+            paths: [path.join(__dirname, "src", "less")]
+        }))
+        .pipe(gulp.dest("public/css"));
 });
 
-gulp.task("default", ["templates"]);
+gulp.task("watch", function() {
+    gulp.watch("src/templates/*.hbs", ["templates"]);
+    gulp.watch("src/less/*.less", ["less"]);
+});
+
+gulp.task("default", ["templates", "less"]);

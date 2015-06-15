@@ -5,6 +5,7 @@ const app = express();
 
 // TODO: take this out for production
 app.use(express.static("src"));
+app.use("/css", express.static("public/css"));
 
 app.get("/connect", function(req, res) {
     res.sendFile(__dirname + "/connect.html");
