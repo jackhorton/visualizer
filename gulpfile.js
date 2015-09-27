@@ -1,34 +1,32 @@
-"use strict";
+'use strict';
 
-const path = require("path");
+const path = require('path');
 
-const gulp = require("gulp");
-const hbs = require("gulp-handlebars");
-const defineModule = require("gulp-define-module");
-const less = require("gulp-less");
+const gulp = require('gulp');
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
+const uglify = require('gulp-uglify');
+const browserify = require('browserify');
+const babelify = require('babelify');
 
-gulp.task('templates', function() {
-    // Load templates from the templates/ folder relative to where gulp was executed
-    gulp.src('src/templates/*.hbs')
-        // Compile each Handlebars template source file to a template function
-        .pipe(hbs())
-        // Define templates as AMD modules
-        .pipe(defineModule('amd'))
-        // Write the output into the templates folder
-        .pipe(gulp.dest('src/templates/compiled'));
+gulp.task('jsx', function() {
+    return browserify('./client/app.jsx', {
+            extensions: ['.jsx']
+        })
+        .transform(babelify)
+        .bundle()
+        .pipe(source('bundle.js'))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest('./dist/js'));
 });
 
-gulp.task("less", function() {
-    gulp.src("src/less/main.less")
+gulp.task('less', function() {
+    gulp.src('src/less/main.less')
         .pipe(less({
-            paths: [path.join(__dirname, "src", "less")]
+            paths: [path.join(__dirname, 'src', 'less')]
         }))
-        .pipe(gulp.dest("public/css"));
+        .pipe(gulp.dest('public/css'));
 });
 
-gulp.task("watch", function() {
-    gulp.watch("src/templates/*.hbs", ["templates"]);
-    gulp.watch("src/less/*.less", ["less"]);
-});
-
-gulp.task("default", ["templates", "less"]);
+gulp.task('default', ['jsx']);
