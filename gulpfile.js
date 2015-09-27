@@ -1,7 +1,5 @@
 'use strict';
 
-const path = require('path');
-
 const gulp = require('gulp');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
@@ -11,13 +9,14 @@ const babelify = require('babelify');
 
 gulp.task('jsx', function() {
     return browserify('./client/app.jsx', {
-            extensions: ['.jsx']
+            extensions: ['.jsx'],
+            debug: true
         })
         .transform(babelify)
         .bundle()
         .pipe(source('bundle.js'))
         .pipe(buffer())
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest('./dist/js'));
 });
 
@@ -27,6 +26,10 @@ gulp.task('less', function() {
             paths: [path.join(__dirname, 'src', 'less')]
         }))
         .pipe(gulp.dest('public/css'));
+});
+
+gulp.task('watch', ['default'], () => {
+    gulp.watch(['./client/**/*.jsx', './client/**/*.js'], ['jsx']);
 });
 
 gulp.task('default', ['jsx']);

@@ -1,9 +1,9 @@
 'use strict';
 
-import react from 'react';
+import React from 'react';
 import Main from './components/main';
 
-react.render(
+React.render(
     <Main />,
     document.getElementById('main')
 );

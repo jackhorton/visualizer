@@ -20,8 +20,11 @@
   "author": "Jack Horton",
   "license": "MIT",
   "dependencies": {
+    "async": "^1.4.2",
     "babel": "^5.8.23",
     "express": "^4.12.4",
+    "musicmetadata": "^2.0.0",
+    "q": "^1.4.1",
     "react": "^0.13.3",
     "reflux": "^0.2.12",
     "reqwest": "^2.0.4"

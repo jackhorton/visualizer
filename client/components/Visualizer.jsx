@@ -1,17 +1,17 @@
 'use strict';
 
-import react from 'react';
+import React from 'react';
 import reflux from 'reflux';
 
 import store from '../stores/track';
 import actions from '../actions/track';
 
-const Visualizer = react.createClass({
+const Visualizer = React.createClass({
     mixins: [reflux.connect(store)],
 
     render() {
         return (
-            <div class="visualizer">
+            <div className="visualizer">
                 <Visualizer.Canvas />
                 <Visualizer.Meta song={this.state.currentSong} />
             </div>
@@ -19,14 +19,14 @@ const Visualizer = react.createClass({
     }
 });
 
-Visualizer.Canvas = react.createClass({
-    mixins: [reflux.listenTo(store, 'createAnalyser')],
+Visualizer.Canvas = React.createClass({
+    mixins: [reflux.listenTo(store, 'updateState')],
 
-    componentWillMount() {
+    componentDidMount() {
         this.canvasElement = document.getElementById('visualizer--canvas');
         this.canvasElement.width = 300;
         this.canvasElement.height = 150;
-        this.canvasContext = canvasElement.getContext('2d');
+        this.canvasContext = this.canvasElement.getContext('2d');
     },
 
     updateState(state) {
@@ -48,9 +48,11 @@ Visualizer.Canvas = react.createClass({
     },
 
     visualize() {
-        if (this.playing) {
-            window.requestAnimationFrame(this.visualize.bind(this));
-        }
+        // if (this.playing) {
+        //     window.requestAnimationFrame(this.visualize);
+        // }
+
+        console.log('visualizing');
 
         // less typing
         let canvas = this.canvasContext;
@@ -65,7 +67,7 @@ Visualizer.Canvas = react.createClass({
         canvas.fillStyle = 'rgb(0, 0, 0)';
         canvas.fillRect(0, 0, width, height);
 
-        analyser.getByteFrequencyData(this.freqArray);
+        this.analyser.getByteFrequencyData(this.freqArray);
         canvas.fillStyle = 'rgb(200, 0, 0)';
 
         for (let i = 0; i < this.analyser.frequencyBinCount; i++) {
@@ -86,14 +88,14 @@ Visualizer.Canvas = react.createClass({
     }
 });
 
-Visualizer.Meta = react.createClass({
+Visualizer.Meta = React.createClass({
     render() {
         return (
-            <div class="visualizer--meta">
-                <div class="visualizer--meta--image">
+            <div className="visualizer--meta">
+                <div className="visualizer--meta--image">
                     <img src={this.props.song.image} />
                 </div>
-                <div class="visualizer--meta--song-info">
+                <div className="visualizer--meta--song-info">
                     <h1>{this.props.song.title}</h1>
                     <h2>{this.props.song.artist}</h2>
                 </div>
@@ -101,3 +103,5 @@ Visualizer.Meta = react.createClass({
         );
     }
 });
+
+export default Visualizer;

@@ -1,19 +1,19 @@
 'use strict';
 
-import react from 'react';
+import React from 'react';
 
 import Tracklist from './tracklist';
 import Visualizer from './visualizer';
 import Controls from './controls';
 
-const Main = react.createClass({
+const Main = React.createClass({
     render() {
         return (
-            <div class="merr">
+            <main>
                 <Tracklist />
                 <Visualizer />
                 <Controls />
-            </div>
+            </main>
         );
     }
 });

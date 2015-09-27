@@ -16,13 +16,16 @@ export default reflux.createStore({
     init() {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         this.audioElement = document.createElement('audio');
+        document.body.appendChild(this.audioElement);
         this.nodes = {
-            source: this.audioContext.createMediaElementSourceNode(this.audioElement),
+            source: this.audioContext.createMediaElementSource(this.audioElement),
             destination: this.audioContext.destination,
             effects: []
         };
         this.currentSong = null;
         this.bufferInterval = -1;
+
+        this.nodes.source.connect(this.nodes.destination);
 
         state.audioContext = this.audioContext;
         state.playing = 'stopped';
@@ -42,7 +45,8 @@ export default reflux.createStore({
             clearInterval(this.bufferInterval);
         }
 
-        this.audioElement.play();
+        this.audioElement.volume = 0.5;
+        document.getElementsByTagName('audio')[0].play();
         state.playing = 'playing';
 
         // when we begin playing a song, keep updating the amount buffered every 500ms
@@ -77,8 +81,14 @@ export default reflux.createStore({
     },
 
     onAddAudioNode(node) {
-        this.nodes.effects[this.nodes.effects.length - 1].disconnect();
-        this.nodes.effects[this.nodes.effects.length - 1].connect(node);
+        if (this.nodes.effects.length > 0) {
+            this.nodes.effects[this.nodes.effects.length - 1].disconnect();
+            this.nodes.effects[this.nodes.effects.length - 1].connect(node);
+        } else {
+            this.nodes.source.disconnect();
+            this.nodes.source.connect(node);
+        }
+
         node.connect(this.nodes.destination);
         this.nodes.effects.push(node);
     },

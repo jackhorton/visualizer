@@ -1,12 +1,14 @@
 'use strict';
 
-import react from 'react';
+import React from 'react';
+import reflux from 'reflux';
 import request from 'reqwest';
 import qs from 'querystring';
 
 import store from '../stores/track.js';
+import actions from '../actions/track.js';
 
-const Tracklist = react.createClass({
+const Tracklist = React.createClass({
     componentDidMount() {
         let offset = this.state.songs.length;
         let query = qs.stringify({offset});
@@ -17,7 +19,7 @@ const Tracklist = react.createClass({
             method: 'get'
         }).then((response) => {
             this.setState({
-                songs: this.state.songs.concat(response.content.songs),
+                songs: this.state.songs.concat(response.songs),
                 error: null
             });
         }).fail((error) => {
@@ -38,8 +40,8 @@ const Tracklist = react.createClass({
         if (this.state.error) {
             innerContent = <div className="tracklist--error"><span>An error has occured</span></div>;
         } else if (this.state.songs && this.state.songs.length > 0) {
-            innerContent = this.state.songs.map((song) => {
-                return <Tracklist.Track key={song.id} song={song} />
+            innerContent = this.state.songs.map((song, index) => {
+                return <Tracklist.Track key={index} song={song} />
             });
         } else {
             innerContent = <div className="tracklist--empty"><span>There are no tracks!</span></div>
@@ -53,13 +55,15 @@ const Tracklist = react.createClass({
     }
 });
 
-Tracklist.Track = react.createClass({
+Tracklist.Track = React.createClass({
     mixins: [reflux.connect(store)],
 
     onClick(e) {
-        if (this.state.playing || this.state.paused) {
+        if (this.state.playing === 'playing' || this.state.playing === 'paused') {
             return;
         }
+
+        console.log('derp');
 
         actions.play(this.props.song);
     },
@@ -69,11 +73,15 @@ Tracklist.Track = react.createClass({
         let classes = `track ${this.state.playing ? 'track--active' : ''}`;
         let trackMeta = (
             <div className="track--meta">
-                <h5>{this.props.title}</h5>
-                <h6>{this.props.artist}</h6>
-                <span>{this.props.duration}</span>
+                <h5>{this.props.song.title}</h5>
+                <h6>{this.props.song.artist[0]}</h6>
+                <span>{this.props.song.duration}</span>
             </div>
         );
+
+        // console.log('=======================');
+        // console.log(this.props);
+        // console.log(this.state);
 
         if (this.state.playing || this.state.paused) {
             trackState = (

@@ -1,16 +1,24 @@
 'use strict';
 
-import react from 'react';
+import React from 'react';
 import reflux from 'reflux';
 
 import actions from '../actions/track';
 
-const Controls = react.createClass({
+const Controls = React.createClass({
+    play() {
+        actions.play();
+    },
+
+    pause() {
+        actions.pause();
+    },
+
     render() {
         return (
-            <div class="controls">
-                <span onClick={actions.play}>Play</span>
-                <span onClick={actions.pause}>Pause</span>
+            <div className="controls">
+                <span onClick={this.play}>Play</span>
+                <span onClick={this.pause}>Pause</span>
             </div>
         );
     }
