@@ -3,7 +3,7 @@
 import React from 'react';
 
 import Tracklist from './tracklist';
-import Visualizer from './visualizer';
+// import Visualizer from './visualizer';
 import Controls from './controls';
 
 const Main = React.createClass({
@@ -11,7 +11,6 @@ const Main = React.createClass({
         return (
             <main>
                 <Tracklist />
-                <Visualizer />
                 <Controls />
             </main>
         );

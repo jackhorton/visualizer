@@ -16,6 +16,7 @@ export default reflux.createStore({
     init() {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         this.audioElement = document.createElement('audio');
+        this.audioElement.preload = 'auto';
         document.body.appendChild(this.audioElement);
         this.nodes = {
             source: this.audioContext.createMediaElementSource(this.audioElement),
@@ -76,6 +77,8 @@ export default reflux.createStore({
     onPause() {
         this.audioElement.pause()
         state.playing = 'paused';
+
+        clearInterval(this.bufferInterval);
 
         this.trigger(state);
     },

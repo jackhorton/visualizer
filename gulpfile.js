@@ -6,6 +6,9 @@ const buffer = require('vinyl-buffer');
 const uglify = require('gulp-uglify');
 const browserify = require('browserify');
 const babelify = require('babelify');
+const less = require('gulp-less');
+const autoprefixer = require('gulp-autoprefixer');
+const path = require('path');
 
 gulp.task('jsx', function() {
     return browserify('./client/app.jsx', {
@@ -21,15 +24,17 @@ gulp.task('jsx', function() {
 });
 
 gulp.task('less', function() {
-    gulp.src('src/less/main.less')
+    gulp.src('client/styles/app.less')
         .pipe(less({
-            paths: [path.join(__dirname, 'src', 'less')]
+            paths: [path.join(__dirname, 'client', 'styles')]
         }))
-        .pipe(gulp.dest('public/css'));
+        .pipe(autoprefixer())
+        .pipe(gulp.dest('./dist/css'));
 });
 
 gulp.task('watch', ['default'], () => {
     gulp.watch(['./client/**/*.jsx', './client/**/*.js'], ['jsx']);
+    gulp.watch(['./client/styles/**/*.less'], ['less']);
 });
 
-gulp.task('default', ['jsx']);
+gulp.task('default', ['jsx', 'less']);

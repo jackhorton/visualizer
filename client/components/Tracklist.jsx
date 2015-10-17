@@ -56,21 +56,37 @@ const Tracklist = React.createClass({
 });
 
 Tracklist.Track = React.createClass({
-    mixins: [reflux.connect(store)],
+    mixins: [reflux.listenTo(store, 'globalTrackListener')],
+
+    getInitialState(song) {
+        return {
+            activeTrack: false,
+            playing: 'stopped'
+        };
+    },
+
+    globalTrackListener(globalTrackState) {
+        if (globalTrackState.currentSong.title === this.props.song.title) {
+            this.setState({
+                activeTrack: true,
+                playing: globalTrackState.playing
+            });
+        } else if (this.state.activeTrack === true) {
+            this.setState({
+                activeTrack: false,
+                playing: 'stopped'
+            });
+        }
+    },
 
     onClick(e) {
-        if (this.state.playing === 'playing' || this.state.playing === 'paused') {
-            return;
+        if (!this.state.activeTrack) {
+            actions.play(this.props.song);
         }
-
-        console.log('derp');
-
-        actions.play(this.props.song);
     },
 
     render() {
-        let trackState;
-        let classes = `track ${this.state.playing ? 'track--active' : ''}`;
+        let classes = `track${this.state.activeTrack ? ' track--active' : ''}`;
         let trackMeta = (
             <div className="track--meta">
                 <h5>{this.props.song.title}</h5>
@@ -78,20 +94,11 @@ Tracklist.Track = React.createClass({
                 <span>{this.props.song.duration}</span>
             </div>
         );
-
-        // console.log('=======================');
-        // console.log(this.props);
-        // console.log(this.state);
-
-        if (this.state.playing || this.state.paused) {
-            trackState = (
-                <div className="track--state">
-                    {this.state.playing ?
-                        <div className="track--state--playing"></div> :
-                        <div className="track--state--paused"></div>}
-                </div>
-            );
-        }
+        let trackState = (
+            <div className="track--state">
+                <div className={`track--state--${this.state.playing}`}></div>
+            </div>
+        );
 
         return (
             <div className={classes} onClick={this.onClick}>

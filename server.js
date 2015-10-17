@@ -1,16 +1,13 @@
 'use strict';
 
-// allow full es6/es7 support elsewhere
-require('babel/register');
-
 // sad commonjs required for entry file
-const express = require('express');
-const fs = require('fs');
-const q = require('q');
-const async = require('async');
-const getMetaData = require('musicmetadata');
+import express from 'express';
+import fs from 'fs';
+import async from 'async';
+import getMetaData from 'musicmetadata';
+import path from 'path';
 
-const songPath = '/Users/jackhorton/Music/iTunes/iTunes Media/Music/SAVOY/Self Predator';
+const songPath = '/Users/jackhorton/Music/iTunes/iTunes Media/Music/SirensCeol/The Method To The Madness';
 const app = express();
 
 function loadSongData(file, callback) {
@@ -32,41 +29,49 @@ function loadSongData(file, callback) {
 }
 
 function loadSongs() {
-    let deferred = q.defer();
-
-    fs.readdir(songPath, (readdirErr, files) => {
-        if (readdirErr) {
-            deferred.reject(readdirErr);
-        }
-
-        async.map(files, loadSongData, (metadataErr, results) => {
-            if (metadataErr) {
-                deferred.reject(metadataErr);
-            } else {
-                deferred.resolve(results);
+    return new Promise((resolve, reject) => {
+        fs.readdir(songPath, (readdirErr, files) => {
+            if (readdirErr) {
+                reject(readdirErr);
             }
+
+            async.map(files, loadSongData, (metadataErr, results) => {
+                if (metadataErr) {
+                    reject(metadataErr);
+                } else {
+                    resolve(results);
+                }
+            });
         });
     });
-
-    return deferred.promise;
 }
 
 app.use('/dist', express.static('./dist'));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/songs/:songTitle', (req, res) => {
     console.log('playing ' + req.params.songTitle);
-    res.set({'Content-Type': 'audio/mpeg3'});
-    fs.createReadStream(`${songPath}/${req.params.songTitle}`).pipe(res);
+    const songFilePath = `${songPath}/${req.params.songTitle}`;
+
+    fs.stat(songFilePath, (err, stats) => {
+        res.set({
+            'Content-Type': 'audio/mpeg3',
+            'Content-Length': stats.size,
+            'Transfer-Encoding': 'chunked'
+        });
+        fs.createReadStream(songFilePath).pipe(res);
+    });
+
+
 });
 
 app.get('/api/songs', (req, res) => {
     loadSongs().then((songs) => {
         res.send({songs});
-    }).fail((err) => {
+    }).catch((err) => {
         res.status(500).send(err);
     });
 });

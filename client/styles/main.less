@@ -1,6 +1,8 @@
-@import './common.less';
-@import './typography.less';
+main {
+    width: 100vw;
+    max-height: 100vh;
 
-@import './tracklist.less';
-@import './controls.less';
-@import './visualizer.less';
+    &[data-app-state="trackview"] {
+        overflow-x: visible;
+    }
+}
