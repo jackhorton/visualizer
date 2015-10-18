@@ -1,9 +1,40 @@
 .tracklist {
-    height: 90vh;
-    max-height: 90vh;
-    columns: 300px;
+    height: ~"calc(100vh - 30px)";
+    max-height: ~"calc(100vh - 30px)";
+    overflow-y: scroll;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
 
-    .track {
-        break-inside: avoid;
+.track {
+    flex: 0 0 25vw;
+    padding: 15px;
+
+    h5 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+        padding-bottom: 5px;
+    }
+
+    h6 {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 300;
+    }
+
+    &--meta {
+
+        &--duration {
+            font-size: 12px;
+            font-weight: 300;
+            color: #E0E0E0
+        }
+    }
+
+    &--state {
     }
 }

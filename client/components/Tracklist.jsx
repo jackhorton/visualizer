@@ -91,7 +91,7 @@ Tracklist.Track = React.createClass({
             <div className="track--meta">
                 <h5>{this.props.song.title}</h5>
                 <h6>{this.props.song.artist[0]}</h6>
-                <span>{this.props.song.duration}</span>
+                <span className="track--meta--duration">{this.props.song.duration}</span>
             </div>
         );
         let trackState = (
