@@ -87,11 +87,13 @@ Tracklist.Track = React.createClass({
 
     render() {
         let classes = `track${this.state.activeTrack ? ' track--active' : ''}`;
+        let minutes = Math.floor(this.props.song.duration / 60);
+        let seconds = Math.round(this.props.song.duration) % 60;
         let trackMeta = (
             <div className="track--meta">
                 <h5>{this.props.song.title}</h5>
                 <h6>{this.props.song.artist[0]}</h6>
-                <span className="track--meta--duration">{this.props.song.duration}</span>
+                <span className="track--meta--duration">{minutes}:{seconds < 10 ? `0${seconds}` : seconds}</span>
             </div>
         );
         let trackState = (
