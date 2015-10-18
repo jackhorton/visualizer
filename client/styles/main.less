@@ -2,7 +2,11 @@ main {
     width: 100vw;
     max-height: 100vh;
 
+    &[data-app-state="visualizer"] {
+        overflow-y: hidden;
+    }
+
     &[data-app-state="trackview"] {
-        overflow-x: visible;
+        overflow-y: visible;
     }
 }
